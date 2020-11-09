@@ -1,3 +1,5 @@
+package Ex0;
+
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 

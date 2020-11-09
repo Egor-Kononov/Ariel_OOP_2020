@@ -1,3 +1,5 @@
+package Ex0;
+
 import java.util.*;
 
 public class Graph_DS implements graph {
