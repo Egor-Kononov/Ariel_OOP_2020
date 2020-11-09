@@ -1,5 +1,6 @@
 package ex1;
 
+import Ex0.node_data;
 import jdk.jshell.spi.ExecutionControl;
 
 import java.io.Serializable;
@@ -29,7 +30,7 @@ public class WGraph_DS  implements weighted_graph,Serializable {
             t = -1;
         }
 
-        public NodeData(node_info other){  //copy constractor
+        public NodeData(node_info other){  //copy constructor
             _key = other.getKey();
             info = other.getInfo();
             neighbor = new HashMap<>();
@@ -128,6 +129,14 @@ public class WGraph_DS  implements weighted_graph,Serializable {
             mc++;
         }
     }
+    public void addNode(node_info n) {  // assistant for copy constructor
+        if(!this.graph.containsKey(n.getKey())) {
+            node_info p = new NodeData(n);
+            this.graph.put(p.getKey(), p);
+            numberOfNode++;
+            mc++;
+        }
+    }
 
     @Override
     public void connect(int node1, int node2, double w) {
@@ -136,10 +145,12 @@ public class WGraph_DS  implements weighted_graph,Serializable {
         }else {
             NodeData p1 = (NodeData) getNode(node1);
             NodeData p2 = (NodeData) getNode(node2);
-            p1.addNi(p2, w);
-            p2.addNi(p1, w);
-            numberOfEdge ++;
-            mc++;
+            if(!p1.getNi().contains(p2)&& node1 != node2) {
+                p1.addNi(p2, w);
+                p2.addNi(p1, w);
+                numberOfEdge++;
+                mc++;
+            }
         }
     }
 
