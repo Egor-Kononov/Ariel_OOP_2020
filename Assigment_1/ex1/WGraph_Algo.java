@@ -3,12 +3,23 @@ package ex1;
 import Ex0.NodeData;
 import Ex0.node_data;
 
-import java.util.ArrayDeque;
-import java.util.List;
-import java.util.Queue;
+import java.io.Serializable;
+import java.util.*;
 
-public class WGraph_Algo implements weighted_graph_algorithms{
+public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
     private weighted_graph graph;
+
+    public class FuelPriority implements Comparator<node_info>{
+
+        @Override
+        public int compare(node_info o1, node_info o2) {
+            return  Double.compare(o1.getTag(), o2.getTag());
+        }
+    }
+
+    public  WGraph_Algo(){
+        this.graph = new WGraph_DS();
+    }
     @Override
     public void init(weighted_graph g) {
         this.graph = g;
@@ -63,7 +74,7 @@ public class WGraph_Algo implements weighted_graph_algorithms{
         while (!st1.isEmpty()){
             node_info p = st1.poll();
             for(node_info run : graph.getV(p.getKey())){
-                if(run.getTag()==-1) {
+                if(run.getTag()== Integer.MAX_VALUE) {
                     run.setTag(p.getTag() + 1);
                     st1.add(run);
                 }
@@ -73,14 +84,54 @@ public class WGraph_Algo implements weighted_graph_algorithms{
 
     public void nullify(){
         for(node_info run : graph.getV()){
-            run.setTag(-1);
-            run.setInfo(" ");
+            run.setTag(Integer.MAX_VALUE);
+            run.setInfo("white");
         }
+    }
+
+    public void dijkatra(int src, int dest){
+        FuelPriority strategy = new FuelPriority();
+        PriorityQueue<node_info> pq = new PriorityQueue<>(graph.edgeSize(),strategy);
+        HashMap<Integer, node_info> parent = new HashMap();
+
+        node_info p = this.graph.getNode(src);
+        p.setTag(0);
+        pq.add(p);
+        while(!pq.isEmpty()){
+            node_info temp = pq.poll();
+            if(temp.getInfo() == "white"){
+                temp.setInfo("blue");
+                if(temp.getKey() == dest){
+                    return;
+                }
+                for(node_info run : this.graph.getV(temp.getKey())){
+                    if(run.getInfo() != "blue" ){
+                        double dist = temp.getTag() + graph.getEdge(temp.getKey(),run.getKey());
+                        if(dist < run.getTag()){
+                            run.setTag(dist);
+                            pq.add(run);
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+        return;
     }
 
     @Override
     public double shortestPathDist(int src, int dest) {
-        return 0;
+        if(src == dest)
+            return 0;
+        if(graph.getV().contains(graph.getNode(src))&&graph.getV().contains(graph.getNode(dest))) {
+            dijkatra(src, dest);
+            double dist = this.graph.getNode(dest).getTag();
+            nullify();
+            return dist;
+        }
+        return -1;
     }
 
     @Override
@@ -97,4 +148,6 @@ public class WGraph_Algo implements weighted_graph_algorithms{
     public boolean load(String file) {
         return false;
     }
+
+
 }

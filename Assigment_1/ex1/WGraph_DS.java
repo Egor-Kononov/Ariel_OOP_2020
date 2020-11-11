@@ -26,8 +26,8 @@ public class WGraph_DS  implements weighted_graph,Serializable {
             _key = key;
             neighbor = new HashMap<>();
             edge = new HashMap<>();
-            info = " ";
-            t = -1;
+            info = "white";
+            t = Integer.MAX_VALUE;
         }
 
         public NodeData(node_info other){  //copy constructor
