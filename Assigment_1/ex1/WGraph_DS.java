@@ -46,13 +46,6 @@ public class WGraph_DS  implements weighted_graph,Serializable {
             this.neighbor.put(p.getKey(),p);
             this.edge.put(p.getKey(), weight);
         }
-        public boolean hasNi(int key) {
-            for(node_info p : this.neighbor.values()){
-                if(p.getKey()== key)
-                    return true;
-            }
-            return false;
-        }
 
         public void removeNode(node_info node) {
             neighbor.remove(node.getKey());

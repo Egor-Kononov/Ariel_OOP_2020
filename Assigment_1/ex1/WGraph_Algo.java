@@ -89,11 +89,10 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
         }
     }
 
-    public void dijkatra(int src, int dest){
+    public HashMap<node_info,Integer> dijkatra(int src, int dest){
         FuelPriority strategy = new FuelPriority();
-        PriorityQueue<node_info> pq = new PriorityQueue<>(graph.edgeSize(),strategy);
-        HashMap<Integer, node_info> parent = new HashMap();
-
+        PriorityQueue<node_info> pq = new PriorityQueue<>(strategy);
+        HashMap<node_info,Integer> parent = new HashMap();
         node_info p = this.graph.getNode(src);
         p.setTag(0);
         pq.add(p);
@@ -102,7 +101,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
             if(temp.getInfo() == "white"){
                 temp.setInfo("blue");
                 if(temp.getKey() == dest){
-                    return;
+                    return parent;
                 }
                 for(node_info run : this.graph.getV(temp.getKey())){
                     if(run.getInfo() != "blue" ){
@@ -110,6 +109,10 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
                         if(dist < run.getTag()){
                             run.setTag(dist);
                             pq.add(run);
+                            if(parent.containsKey(run)){
+                                parent.remove(run);
+                            }
+                            parent.put(run,temp.getKey());
                         }
                     }
                 }
@@ -118,7 +121,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
 
 
 
-        return;
+        return null;
     }
 
     @Override
@@ -128,6 +131,8 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
         if(graph.getV().contains(graph.getNode(src))&&graph.getV().contains(graph.getNode(dest))) {
             dijkatra(src, dest);
             double dist = this.graph.getNode(dest).getTag();
+            if(dist == Integer.MAX_VALUE)
+                return -1;
             nullify();
             return dist;
         }
@@ -136,6 +141,27 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
 
     @Override
     public List<node_info> shortestPath(int src, int dest) {
+        LinkedList<node_info> path = new LinkedList<node_info>();
+        if(src == dest) {
+            node_info s = graph.getNode(dest);
+            path.addFirst(s);
+            return path;
+        }
+        if(graph.getV().contains(graph.getNode(src))&&graph.getV().contains(graph.getNode(dest))) {
+             path = new LinkedList<node_info>();
+            HashMap<node_info, Integer> h = dijkatra(src, dest);
+            node_info s = graph.getNode(dest);
+            if(s.getTag()==Integer.MAX_VALUE )
+                return null;
+            path.addFirst(s);
+            int r = h.get(s);
+            while (r != src) {
+                r = h.get(s);
+                s = graph.getNode(r);
+                path.addFirst(s);
+            }
+            return path;
+        }
         return null;
     }
 
