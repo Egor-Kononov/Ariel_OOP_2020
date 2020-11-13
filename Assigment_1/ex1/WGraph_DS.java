@@ -3,18 +3,18 @@ package ex1;
 import Ex0.node_data;
 import jdk.jshell.spi.ExecutionControl;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.Collection;
 import java.util.HashMap;
 
 
-public class WGraph_DS  implements weighted_graph,Serializable {
+public class WGraph_DS implements weighted_graph,java.io.Serializable {
     private HashMap<Integer, node_info> graph;
     private int numberOfNode;
     private int numberOfEdge;
     private int mc ;
 
-    public class NodeData implements node_info, Serializable {
+    public  class  NodeData implements node_info,java.io.Serializable {
         private HashMap<Integer,node_info> neighbor;
         private HashMap<Integer,Double> edge;
         private int _key;
@@ -133,9 +133,8 @@ public class WGraph_DS  implements weighted_graph,Serializable {
 
     @Override
     public void connect(int node1, int node2, double w) {
-        if(getNode(node1)==null || getNode(node2)==null ) {
-            throw new RuntimeException("vertex "+node1+"or vertex "+node2+"does not exist");
-        }else {
+        if(w < 0 && (getNode(node1)==null || getNode(node2)==null))
+            return;
             NodeData p1 = (NodeData) getNode(node1);
             NodeData p2 = (NodeData) getNode(node2);
             if(!p1.getNi().contains(p2)&& node1 != node2) {
@@ -144,7 +143,6 @@ public class WGraph_DS  implements weighted_graph,Serializable {
                 numberOfEdge++;
                 mc++;
             }
-        }
     }
 
     @Override
@@ -186,9 +184,6 @@ public class WGraph_DS  implements weighted_graph,Serializable {
             mc++;
         }
     }
-
-
-
 
     @Override
     public int nodeSize() {

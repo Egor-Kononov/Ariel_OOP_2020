@@ -1,14 +1,11 @@
 package ex1;
 
-import Ex0.NodeData;
-import Ex0.node_data;
-
-import java.io.Serializable;
+import java.io.*;
 import java.util.*;
 
-public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
+public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializable {
     private weighted_graph graph;
-
+    
     public class FuelPriority implements Comparator<node_info>{
 
         @Override
@@ -58,10 +55,9 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
         }
         bfs(start);
         for(node_info run : this.graph.getV()){ //here i am counting the number of vertices in which it was changed Tag
-            if(run.getTag()!=-1)
+            if(run.getTag()!=Integer.MAX_VALUE)
                 count++;
         }
-
         nullify();
         return this.graph.nodeSize() == count ;
     }
@@ -98,7 +94,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
         pq.add(p);
         while(!pq.isEmpty()){
             node_info temp = pq.poll();
-            if(temp.getInfo() == "white"){
+            if(temp.getInfo() != "blue"){
                 temp.setInfo("blue");
                 if(temp.getKey() == dest){
                     return parent;
@@ -118,9 +114,6 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
                 }
             }
         }
-
-
-
         return null;
     }
 
@@ -160,6 +153,7 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
                 s = graph.getNode(r);
                 path.addFirst(s);
             }
+            nullify();
             return path;
         }
         return null;
@@ -167,13 +161,44 @@ public class WGraph_Algo implements weighted_graph_algorithms, Serializable {
 
     @Override
     public boolean save(String file) {
-        return false;
+        System.out.println("starting Serialize to "+file+"\n");
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            ObjectOutputStream objectOutputStream
+                    = new ObjectOutputStream(fileOutputStream);
+
+            objectOutputStream.writeObject(this.graph);
+
+            fileOutputStream.close();
+            objectOutputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        System.out.println("end of Serialize \n\n");
+        return true;
     }
+
 
     @Override
     public boolean load(String file) {
-        return false;
+        System.out.println("Deserialize from : " + file);
+        try {
+            FileInputStream fileInputStream = new FileInputStream(file);
+            ObjectInputStream objectInputStream
+                    = new ObjectInputStream(fileInputStream);
+            weighted_graph deserializedAriel = (weighted_graph) objectInputStream.readObject();
+            fileInputStream.close();
+            objectInputStream.close();
+            this.graph = deserializedAriel;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
 
-}
+
+    }
