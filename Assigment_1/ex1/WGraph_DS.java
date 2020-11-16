@@ -6,6 +6,7 @@ import jdk.jshell.spi.ExecutionControl;
 import java.io.*;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Objects;
 
 
 public class WGraph_DS implements weighted_graph,java.io.Serializable {
@@ -54,6 +55,18 @@ public class WGraph_DS implements weighted_graph,java.io.Serializable {
         public double getWeightOfEdge(int key){
             return  this.edge.get(key);
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            NodeData nodeData = (NodeData) o;
+            return _key == nodeData._key &&
+                    Double.compare(nodeData.t, t) == 0 &&
+                    Objects.equals(edge, nodeData.edge) &&
+                    Objects.equals(info, nodeData.info);
+        }
+
 
         @Override
         public int getKey() {
@@ -113,14 +126,13 @@ public class WGraph_DS implements weighted_graph,java.io.Serializable {
 
     @Override
     public void addNode(int key) {
-        if(getNode(key)!=null) {
-            throw new RuntimeException("such a Key already exists");
-        }else {
+        if(graph.containsKey(key))
+            return;
             node_info p = new NodeData(key);
             graph.put(p.getKey(), p);
             numberOfNode ++;
             mc++;
-        }
+
     }
     public void addNode(node_info n) {  // assistant for copy constructor
         if(!this.graph.containsKey(n.getKey())) {
@@ -183,6 +195,22 @@ public class WGraph_DS implements weighted_graph,java.io.Serializable {
             numberOfEdge--;
             mc++;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WGraph_DS wGraph_ds = (WGraph_DS) o;
+        return numberOfNode == wGraph_ds.numberOfNode &&
+                numberOfEdge == wGraph_ds.numberOfEdge &&
+                mc == wGraph_ds.mc &&
+                Objects.equals(graph, wGraph_ds.graph);
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
     }
 
     @Override
