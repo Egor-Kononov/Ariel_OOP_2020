@@ -49,18 +49,25 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
             return true;
         int count = 0;
         node_info start = null;
-        for (node_info run : this.graph.getV()){ //forEach i used to get any node which is located in
+        //forEach I'm used to get any node which is located in
+        for (node_info run : this.graph.getV()){
             start = run;
             break;
         }
         bfs(start);
-        for(node_info run : this.graph.getV()){ //here i am counting the number of vertices in which it was changed Tag
+        //here i am counting the number of vertices in which it was changed Tag
+        for(node_info run : this.graph.getV()){
             if(run.getTag()!=Integer.MAX_VALUE)
                 count++;
         }
         nullify();
         return this.graph.nodeSize() == count ;
     }
+
+    /**
+     * Breadth-first search algorithm founded on data structure Queue
+     * @param start
+     */
     public void bfs(node_info start){
         if(start == null)
             return;
@@ -78,12 +85,20 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
         }
     }
 
+    /**
+     * nullify tags and info in all nodes
+     */
     public void nullify(){
         for(node_info run : graph.getV()){
             run.setTag(Integer.MAX_VALUE);
             run.setInfo("white");
         }
     }
+
+    /**
+     * algorithm dijkatra founded on data structure PriorityQueue
+     * and HashMap which returns the shortest path ;
+     */
 
     public HashMap<node_info,Integer> dijkatra(int src, int dest){
         FuelPriority strategy = new FuelPriority();
@@ -94,11 +109,13 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
         pq.add(p);
         while(!pq.isEmpty()){
             node_info temp = pq.poll();
+            // blue the node which was visited
             if(temp.getInfo() != "blue"){
                 temp.setInfo("blue");
                 if(temp.getKey() == dest){
                     return parent;
                 }
+                // check all neighbors of visited node
                 for(node_info run : this.graph.getV(temp.getKey())){
                     if(run.getInfo() != "blue" ){
                         double dist = temp.getTag() + graph.getEdge(temp.getKey(),run.getKey());
@@ -141,17 +158,18 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
             return path;
         }
         if(graph.getV().contains(graph.getNode(src))&&graph.getV().contains(graph.getNode(dest))) {
-             path = new LinkedList<node_info>();
+            //HashMap with path
             HashMap<node_info, Integer> h = dijkatra(src, dest);
-            node_info s = graph.getNode(dest);
-            if(s.getTag()==Integer.MAX_VALUE )
+            node_info tempVariable = graph.getNode(dest);
+            //check if got to destination
+            if(tempVariable.getTag()==Integer.MAX_VALUE )
                 return null;
-            path.addFirst(s);
-            int r = h.get(s);
-            while (r != src) {
-                r = h.get(s);
-                s = graph.getNode(r);
-                path.addFirst(s);
+            path.addFirst(tempVariable);
+            int keyOfparent = h.get(tempVariable);
+            while (keyOfparent != src) {
+                keyOfparent = h.get(tempVariable);
+                tempVariable = graph.getNode(keyOfparent);
+                path.addFirst(tempVariable);
             }
             nullify();
             return path;

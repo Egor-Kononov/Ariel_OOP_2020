@@ -15,7 +15,7 @@ public class WGraph_DS implements weighted_graph,java.io.Serializable {
     private int numberOfEdge;
     private int mc ;
 
-    public  class  NodeData implements node_info,java.io.Serializable {
+    private class NodeData implements node_info,java.io.Serializable {
         private HashMap<Integer,node_info> neighbor;
         private HashMap<Integer,Double> edge;
         private int _key;
@@ -31,12 +31,15 @@ public class WGraph_DS implements weighted_graph,java.io.Serializable {
             t = Integer.MAX_VALUE;
         }
 
+        /**
+         * copy constructor
+         */
         public NodeData(node_info other){  //copy constructor
             _key = other.getKey();
             info = other.getInfo();
             neighbor = new HashMap<>();
             edge = new HashMap<>();
-            t = -1;
+            t = Integer.MAX_VALUE;
         }
         public  Collection<node_info> getNi() {
             if(this.neighbor == null)
@@ -134,7 +137,11 @@ public class WGraph_DS implements weighted_graph,java.io.Serializable {
             mc++;
 
     }
-    public void addNode(node_info n) {  // assistant for copy constructor
+
+    /**
+     * assistant for copy constructor
+     */
+    public void addNode(node_info n) {
         if(!this.graph.containsKey(n.getKey())) {
             node_info p = new NodeData(n);
             this.graph.put(p.getKey(), p);
@@ -206,11 +213,6 @@ public class WGraph_DS implements weighted_graph,java.io.Serializable {
                 numberOfEdge == wGraph_ds.numberOfEdge &&
                 mc == wGraph_ds.mc &&
                 Objects.equals(graph, wGraph_ds.graph);
-    }
-
-    @Override
-    public int hashCode() {
-        return 0;
     }
 
     @Override
