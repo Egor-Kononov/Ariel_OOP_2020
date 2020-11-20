@@ -107,7 +107,7 @@ public class WGraph_DS implements weighted_graph,java.io.Serializable {
 
     @Override
     public boolean hasEdge(int node1, int node2) {
-        NodeData p1 = (NodeData)getNode(node1);
+        NodeData p1 = (NodeData) getNode(node1);
         NodeData p2 = (NodeData)getNode(node2);
         return p1.getNi().contains(p2);
     }

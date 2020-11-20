@@ -7,6 +7,16 @@ import static org.junit.jupiter.api.Assertions.*;
 class WGraph_AlgoTest {
 
     @Test
+    void copy(){
+        weighted_graph g0 = small_graph();
+        weighted_graph_algorithms ag0 = new WGraph_Algo();
+        ag0.init(g0);
+        weighted_graph g1 = ag0.copy();
+        assertEquals(g0,g1);
+        assertFalse(g0 == g1);
+    }
+
+    @Test
     void isConnected() {
         weighted_graph g0 = WGraph_DSTest.graph_creator(0,0,1);
         weighted_graph_algorithms ag0 = new WGraph_Algo();

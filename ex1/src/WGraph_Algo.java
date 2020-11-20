@@ -3,14 +3,6 @@ import java.util.*;
 
 public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializable {
     private weighted_graph graph;
-    
-    public class FuelPriority implements Comparator<node_info>{
-
-        @Override
-        public int compare(node_info o1, node_info o2) {
-            return  Double.compare(o1.getTag(), o2.getTag());
-        }
-    }
 
     public  WGraph_Algo(){
         this.graph = new WGraph_DS();
@@ -99,8 +91,12 @@ public class WGraph_Algo implements weighted_graph_algorithms, java.io.Serializa
      */
 
     public HashMap<node_info,Integer> dijkatra(int src, int dest){
-        FuelPriority strategy = new FuelPriority();
-        PriorityQueue<node_info> pq = new PriorityQueue<>(strategy);
+        PriorityQueue<node_info> pq = new PriorityQueue<>(new Comparator<node_info>() {
+            @Override
+            public int compare(node_info o1, node_info o2) {
+                return  Double.compare(o1.getTag(), o2.getTag());
+            }
+        });
         HashMap<node_info,Integer> parent = new HashMap();
         node_info p = this.graph.getNode(src);
         p.setTag(0);
