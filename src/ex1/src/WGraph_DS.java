@@ -1,3 +1,5 @@
+package ex1.src;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Objects;
@@ -10,7 +12,7 @@ public class WGraph_DS implements weighted_graph,java.io.Serializable {
     private int mc ;
 
     private class NodeData implements node_info,java.io.Serializable {
-        private HashMap<Integer,node_info> neighbor;
+        private HashMap<Integer, node_info> neighbor;
         private HashMap<Integer,Double> edge;
         private int _key;
         private String info;

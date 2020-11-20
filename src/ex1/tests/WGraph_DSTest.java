@@ -1,5 +1,8 @@
+package ex1.tests;
 
-
+import ex1.src.WGraph_DS;
+import ex1.src.node_info;
+import ex1.src.weighted_graph;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

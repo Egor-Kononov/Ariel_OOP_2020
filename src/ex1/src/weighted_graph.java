@@ -1,3 +1,7 @@
+package ex1.src;
+
+import ex1.src.node_info;
+
 import java.util.Collection;
 
 /**
