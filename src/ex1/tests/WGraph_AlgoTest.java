@@ -20,6 +20,7 @@ class WGraph_AlgoTest {
         weighted_graph g1 = ag0.copy();
         assertEquals(g0,g1);
         assertFalse(g0 == g1);
+        assertFalse(g0.getNode(0)==g1.getNode(0) );
     }
 
     @Test
