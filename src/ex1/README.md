@@ -1,4 +1,4 @@
-# OOP-assigment-1
+# Ariel_OOP_2020
 ## this project deals with undirected weighted graph.
 ### this graph consist of 3 interfaces, 2 classes and inner class
 
