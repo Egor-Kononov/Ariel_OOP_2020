@@ -111,6 +111,8 @@ public class WGraph_DS implements weighted_graph,java.io.Serializable {
     public boolean hasEdge(int node1, int node2) {
         NodeData p1 = (NodeData) getNode(node1);
         NodeData p2 = (NodeData)getNode(node2);
+        if(p1 == null || p2 == null)
+            return false;
         return p1.getNi().contains(p2);
     }
 
@@ -152,7 +154,16 @@ public class WGraph_DS implements weighted_graph,java.io.Serializable {
             return;
             NodeData p1 = (NodeData) getNode(node1);
             NodeData p2 = (NodeData) getNode(node2);
-            if(!p1.getNi().contains(p2)&& node1 != node2) {
+        if (p1 == null || p2 == null) {
+            return;
+        }
+            if(!p1.getNi().contains(p2)&& node1 != node2){
+                p1.addNi(p2, w);
+                p2.addNi(p1, w);
+                numberOfEdge++;
+                mc++;
+            }
+            if(p1.getNi().contains(p2)&& node1 != node2 && p1.getWeightOfEdge(node2)!=w){
                 p1.addNi(p2, w);
                 p2.addNi(p1, w);
                 numberOfEdge++;
@@ -181,6 +192,7 @@ public class WGraph_DS implements weighted_graph,java.io.Serializable {
             NodeData s = (NodeData)i;
             s.removeNode(p);
             numberOfEdge --;
+            mc++;
         }
         graph.remove(key);
         numberOfNode --;
